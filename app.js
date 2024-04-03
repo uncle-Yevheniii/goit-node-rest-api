@@ -40,6 +40,18 @@ app.get("/ping", (req, res) => {
 });
 
 /**
+ * REST api
+ *
+ * POST         /contacts
+ * GET          /contacts
+ * GET          /contacts/:<userID>
+ * PUT          /contacts/:<userID>
+ * DELETE       /contacts/:<userID>
+ */
+
+app.post("/contacts", (req, res) => {});
+
+/**
  * server-init
  */
 const port = 3000;

@@ -27,11 +27,16 @@
 
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import morgan from "morgan";
 
 import { router as contactsRouter } from "./routes/contactsRouter.js";
 
+dotenv.config();
+
 const app = express();
 
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 /**
  * middleware
  */
@@ -46,7 +51,7 @@ app.use(`${pathPrefix}/contacts`, contactsRouter);
 /**
  * server-init
  */
-const port = 3000;
+const port = Number(process.env.PORT);
 app.listen(port, () => {
   console.log(`Server is running. Use our API on port: ${port}`);
 });

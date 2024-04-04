@@ -27,15 +27,8 @@
 
 import express from "express";
 import cors from "cors";
-import { nanoid } from "nanoid";
-import { promises as fs } from "fs";
 
-import {
-  addContact,
-  getContactById,
-  listContacts,
-  removeContact,
-} from "./services/contactsServices.js";
+import { router as contactsRouter } from "./routes/contactsRouter.js";
 
 const app = express();
 
@@ -43,24 +36,12 @@ const app = express();
  * middleware
  */
 app.use(express.json());
-app.use("/contacts/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const user = await getContactById(id);
-    if (!user) {
-      return res.status(404).json({ message: "Not found" });
-    }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 /**
- * health-check
+ * routes
  */
+const pathPrefix = "/api";
+app.use(`${pathPrefix}/contacts`, contactsRouter);
 
 /**
  * server-init

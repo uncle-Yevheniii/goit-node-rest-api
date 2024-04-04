@@ -19,6 +19,8 @@ export const createContact = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+
+    res.status(505).json({ message: "internal server error" });
   }
 };
 
@@ -33,6 +35,8 @@ export const getAllContacts = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+
+  res.status(505).json({ message: "internal server error" });
 };
 
 export const getOneContact = (req, res) => {
@@ -55,6 +59,8 @@ export const deleteContact = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+
+    res.status(505).json({ message: "internal server error" });
   }
 };
 

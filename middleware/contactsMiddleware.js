@@ -12,5 +12,7 @@ export const checkUserId = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
+
+    res.status(505).json({ message: "internal server error" });
   }
 };

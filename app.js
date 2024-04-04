@@ -47,6 +47,10 @@ app.use(express.json());
  */
 const pathPrefix = "/api";
 app.use(`${pathPrefix}/contacts`, contactsRouter);
+// not-found-route
+app.all("*", (req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
 
 /**
  * server-init

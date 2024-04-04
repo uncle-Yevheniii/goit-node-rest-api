@@ -30,7 +30,7 @@ import cors from "cors";
 import { nanoid } from "nanoid";
 import { promises as fs } from "fs";
 
-import { addContact } from "./services/contactsServices.js";
+import { addContact, listContacts } from "./services/contactsServices.js";
 
 const app = express();
 
@@ -58,16 +58,28 @@ app.get("/ping", (req, res) => {
 app.post("/contacts", async (req, res) => {
   try {
     const { name, email, phone } = req.body;
-    await addContact(name, email, phone);
+    const newUser = await addContact(name, email, phone);
 
     res.status(201).json({
       status: "create",
+      data: newUser,
     });
   } catch (error) {
     console.log(error);
   }
 });
+app.get("/contacts", async (req, res) => {
+  try {
+    const allContacts = await listContacts();
 
+    res.status(200).json({
+      status: "read",
+      data: allContacts,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 /**
  * server-init
  */

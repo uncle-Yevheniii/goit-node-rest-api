@@ -34,6 +34,7 @@ import {
   addContact,
   getContactById,
   listContacts,
+  removeContact,
 } from "./services/contactsServices.js";
 
 const app = express();
@@ -102,6 +103,23 @@ app.get("/contacts/:id", async (req, res) => {
     res.status(200).json({
       status: "read",
       data: oneContacts,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// * DELETE       /contacts/:<userID>
+app.delete("/contacts/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    // validation
+
+    const deleteUser = await removeContact(id);
+
+    res.status(200).json({
+      status: "deleted",
+      data: deleteUser,
     });
   } catch (error) {
     console.log(error);

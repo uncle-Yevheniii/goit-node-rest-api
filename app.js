@@ -30,7 +30,14 @@ import cors from "cors";
 import { nanoid } from "nanoid";
 import { promises as fs } from "fs";
 
+import { addContact } from "./services/contactsServices.js";
+
 const app = express();
+
+/**
+ * middleware
+ */
+app.use(express.json());
 
 /**
  * health-check
@@ -48,8 +55,18 @@ app.get("/ping", (req, res) => {
  * PUT          /contacts/:<userID>
  * DELETE       /contacts/:<userID>
  */
+app.post("/contacts", async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+    await addContact(name, email, phone);
 
-app.post("/contacts", (req, res) => {});
+    res.status(201).json({
+      status: "create",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 /**
  * server-init

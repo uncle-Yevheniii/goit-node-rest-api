@@ -43,9 +43,9 @@ const router = Router();
  * DELETE       /contacts/:<userID>
  */
 
-router.post("/", createContact);
-router.get("/", getAllContacts);
-router.get("/:id", checkUserId, getOneContact);
-router.delete("/:id", checkUserId, deleteContact);
+router.route("/").post(createContact).get(getAllContacts);
+
+router.use("/:id", checkUserId);
+router.route("/:id").get(getOneContact).delete(deleteContact);
 
 export { router };

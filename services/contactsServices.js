@@ -49,15 +49,13 @@ export async function addContact(name, email, phone) {
 }
 
 // ================================================================
-export async function removeContact(contactId) {
+export async function removeContact(user) {
   try {
     // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
 
-    const deleteUser = await getContactById(contactId);
+    const deleteUser = user;
     const contactsJson = await listContacts();
-    const visibleContacts = contactsJson.filter(
-      (data) => data.id !== contactId
-    );
+    const visibleContacts = contactsJson.filter((data) => data.id !== user.id);
 
     await fs.writeFile(contactsPath, JSON.stringify(visibleContacts));
     return deleteUser;

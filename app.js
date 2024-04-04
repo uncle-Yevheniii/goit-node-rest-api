@@ -43,6 +43,20 @@ const app = express();
  * middleware
  */
 app.use(express.json());
+app.use("/contacts/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await getContactById(id);
+    if (!user) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 /**
  * health-check
@@ -93,29 +107,20 @@ app.get("/contacts", async (req, res) => {
 });
 
 // * GET          /contacts/:<userID>
-app.get("/contacts/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    // validation
+app.get("/contacts/:id", (req, res) => {
+  const { user } = req;
 
-    const oneContacts = await getContactById(id);
-
-    res.status(200).json({
-      status: "read",
-      data: oneContacts,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  res.status(200).json({
+    status: "read",
+    data: user,
+  });
 });
 
 // * DELETE       /contacts/:<userID>
 app.delete("/contacts/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    // validation
-
-    const deleteUser = await removeContact(id);
+    const { user } = req;
+    const deleteUser = await removeContact(user);
 
     res.status(200).json({
       status: "deleted",

@@ -1,16 +1,27 @@
-// import contactsService from "../services/contactsServices.js";
+import Joi from "joi";
 
+import { createContactSchema } from "../schemas/contactsSchemas.js";
+import { HttpError } from "../utils/httpError.js";
 import {
   addContact,
   listContacts,
   removeContact,
 } from "../services/contactsServices.js";
+import { joiValidator } from "../utils/joiValidator.js";
 
 export const createContact = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    // validation
+    // console.log();
 
+    // console.log(createContactSchema.validate(req.body));
+
+    console.log(createContactSchema.validate(req.body));
+    const a = createContactSchema.validate(req.body);
+    const { value, errors } = a;
+    if (errors) {
+      return new HttpError(400, "Invalid user data", errors);
+    }
+    const { name, email, phone } = value;
     const newUser = await addContact(name, email, phone);
 
     res.status(201).json({

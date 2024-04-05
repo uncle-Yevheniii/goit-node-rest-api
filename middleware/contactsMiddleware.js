@@ -1,5 +1,5 @@
 import { getContactById } from "../services/contactsServices.js";
-import { HttpError } from "../utils/httpError.js";
+import { HttpError } from "../helpers/HttpError.js";
 
 export const checkUserId = async (req, res, next) => {
   try {
@@ -7,7 +7,7 @@ export const checkUserId = async (req, res, next) => {
     const user = await getContactById(id);
 
     if (!user) {
-      throw new HttpError(404, "Not found");
+      throw HttpError(404, "Not found");
     }
 
     req.user = user;

@@ -3,8 +3,7 @@ import { nanoid } from "nanoid";
 import path from "path";
 
 //path to the variable
-const contactsPath = path.resolve("db", "test.json"); //       !!!TEST!!!
-// const contactsPath = path.resolve("db", "contacts.json");
+const contactsPath = path.resolve("db", "contacts.json");
 
 // ================================================================
 export async function listContacts() {

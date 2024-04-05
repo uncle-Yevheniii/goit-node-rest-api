@@ -1,18 +1,18 @@
 import { getContactById } from "../services/contactsServices.js";
+import { HttpError } from "../utils/httpError.js";
 
 export const checkUserId = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await getContactById(id);
+
     if (!user) {
-      return res.status(404).json({ message: "Not found" });
+      throw new HttpError(404, "Not found");
     }
 
     req.user = user;
     next();
   } catch (error) {
-    console.log(error);
-
-    res.status(505).json({ message: "internal server error" });
+    next(error);
   }
 };

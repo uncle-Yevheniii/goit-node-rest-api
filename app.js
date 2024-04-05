@@ -31,6 +31,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 
 import { router as contactsRouter } from "./routes/contactsRouter.js";
+import { errorGlobalHandler } from "./controllers/errorControllers.js";
 
 dotenv.config();
 
@@ -51,6 +52,8 @@ app.use(`${pathPrefix}/contacts`, contactsRouter);
 app.all("*", (req, res) => {
   res.status(404).json({ message: "Not found" });
 });
+
+app.use(errorGlobalHandler);
 
 /**
  * server-init

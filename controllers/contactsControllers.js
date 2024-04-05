@@ -6,7 +6,7 @@ import {
   removeContact,
 } from "../services/contactsServices.js";
 
-export const createContact = async (req, res) => {
+export const createContact = async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
     // validation
@@ -18,13 +18,11 @@ export const createContact = async (req, res) => {
       data: newUser,
     });
   } catch (error) {
-    console.log(error);
-
-    res.status(505).json({ message: "internal server error" });
+    next(error);
   }
 };
 
-export const getAllContacts = async (req, res) => {
+export const getAllContacts = async (req, res, next) => {
   try {
     const allContacts = await listContacts();
 
@@ -33,10 +31,8 @@ export const getAllContacts = async (req, res) => {
       data: allContacts,
     });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
-
-  res.status(505).json({ message: "internal server error" });
 };
 
 export const getOneContact = (req, res) => {
@@ -48,7 +44,7 @@ export const getOneContact = (req, res) => {
   });
 };
 
-export const deleteContact = async (req, res) => {
+export const deleteContact = async (req, res, next) => {
   try {
     const { user } = req;
     const deleteUser = await removeContact(user);
@@ -58,9 +54,7 @@ export const deleteContact = async (req, res) => {
       data: deleteUser,
     });
   } catch (error) {
-    console.log(error);
-
-    res.status(505).json({ message: "internal server error" });
+    next(error);
   }
 };
 

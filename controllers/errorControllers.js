@@ -9,7 +9,5 @@ export const errorGlobalHandler = (err, req, res, next) => {
           : err.message,
     });
   }
-  res
-    .status(err.status ?? 500)
-    .json({ message: err.message, data: err.data, stack: err.stack });
+  res.status(err.status ?? 500).json({ message: err.message, data: err.data });
 };

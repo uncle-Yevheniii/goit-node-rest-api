@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { joiValidator } from "./validator.js";
+import { joiValidator } from "../helpers/joiValidator.js";
 
 export const createContactValidator = joiValidator((data) =>
   Joi.object()

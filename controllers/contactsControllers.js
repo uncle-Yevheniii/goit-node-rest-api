@@ -1,10 +1,11 @@
-import HttpError from "../helpers/HttpError.js";
+import { HttpError } from "../helpers/HttpError.js";
 import {
   createContactValidator,
   updateContactValidator,
 } from "../schemas/contactsSchemas.js";
 import {
   addContact,
+  changeContact,
   listContacts,
   removeContact,
 } from "../services/contactsServices.js";
@@ -80,7 +81,8 @@ export const updateContact = async (req, res, next) => {
 
     const updatedUser = await changeContact(id, value);
     res.status(200).json({
-      ...updatedUser,
+      status: "uppdate",
+      data: updatedUser,
     });
   } catch (e) {
     next(e);

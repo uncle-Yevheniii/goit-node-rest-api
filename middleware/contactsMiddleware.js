@@ -1,5 +1,5 @@
 import { getContactById } from "../services/contactsServices.js";
-import HttpError from "../helpers/HttpError.js";
+import { HttpError } from "../helpers/HttpError.js";
 
 export const checkUserId = async (req, res, next) => {
   try {
@@ -12,7 +12,7 @@ export const checkUserId = async (req, res, next) => {
 
     req.user = user;
     next();
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
   }
 };

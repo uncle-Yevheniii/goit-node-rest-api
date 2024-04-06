@@ -5,6 +5,7 @@ import {
   deleteContact,
   getAllContacts,
   getOneContact,
+  updateContact,
 } from "../controllers/contactsControllers.js";
 import { checkUserId } from "../middleware/contactsMiddleware.js";
 
@@ -23,6 +24,11 @@ const router = Router();
 router.route("/").post(createContact).get(getAllContacts);
 
 router.use("/:id", checkUserId);
-router.route("/:id").get(getOneContact).delete(deleteContact);
+router
+  .route("/:id")
+  .get(getOneContact)
+  .delete(deleteContact)
+  .put(updateContact)
+  .patch(updateContact);
 
 export { router };

@@ -1,13 +1,11 @@
-export const errorGlobalHandler = (err, req, res, next) => {
-  console.log(err);
+export const errorGlobalHandler = (e, req, res, next) => {
+  console.log(e);
 
   if (process.env.NODE_ENV !== "development") {
-    return res.status(err.status ?? 500).json({
+    return res.status(e.status ?? 500).json({
       message:
-        !err.status || err.status === 500
-          ? "Internal server error"
-          : err.message,
+        !e.status || e.status === 500 ? "Internal server error" : e.message,
     });
   }
-  res.status(err.status ?? 500).json({ message: err.message, data: err.data });
+  res.status(e.status ?? 500).json({ message: e.message, data: e.data });
 };

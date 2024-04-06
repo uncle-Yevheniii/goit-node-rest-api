@@ -65,11 +65,7 @@ export async function removeContact(contactId) {
 export async function changeContact(id, value) {
   try {
     const prevContact = await getContactById(id);
-    const changedContact = {
-      ...prevContact,
-      ...value,
-    };
-
+    const changedContact = { ...prevContact, ...value };
     const userList = await listContacts();
     const index = userList.findIndex((contact) => contact.id === id);
     if (index !== -1) {

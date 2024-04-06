@@ -5,6 +5,6 @@ export const joiValidator = (schema) => (data) => {
 
   return {
     value,
-    errors: error.details.map((err) => err.message),
+    errors: error.details.map((e) => e.message),
   };
 };

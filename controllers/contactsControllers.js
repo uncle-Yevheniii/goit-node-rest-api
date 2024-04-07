@@ -20,9 +20,7 @@ export const createContact = async (req, res, next) => {
     }
 
     const newUser = await addContact(name, email, phone);
-    res.status(201).json({
-      ...newUser,
-    });
+    res.status(201).json(newUser);
   } catch (error) {
     next(error);
   }
@@ -32,9 +30,7 @@ export const getAllContacts = async (req, res, next) => {
   try {
     const allContacts = await listContacts();
 
-    res.status(200).json({
-      ...allContacts,
-    });
+    res.status(200).json(allContacts);
   } catch (e) {
     next(e);
   }
@@ -43,9 +39,7 @@ export const getAllContacts = async (req, res, next) => {
 export const getOneContact = (req, res) => {
   const { user } = req;
 
-  res.status(200).json({
-    ...user,
-  });
+  res.status(200).json(user);
 };
 
 export const deleteContact = async (req, res, next) => {
@@ -54,9 +48,7 @@ export const deleteContact = async (req, res, next) => {
     const { id } = req.params;
     const deleteUser = await removeContact(id);
 
-    res.status(200).json({
-      ...deleteUser,
-    });
+    res.status(200).json(deleteUser);
   } catch (e) {
     next(e);
   }
@@ -76,9 +68,7 @@ export const updateContact = async (req, res, next) => {
     }
 
     const updatedUser = await changeContact(id, value);
-    res.status(200).json({
-      ...updatedUser,
-    });
+    res.status(200).json(updatedUser);
   } catch (e) {
     next(e);
   }

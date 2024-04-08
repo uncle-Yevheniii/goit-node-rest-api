@@ -1,16 +1,19 @@
+import { Types } from "mongoose";
+
 import { getContactById } from "../services/contactsServices.js";
 import { HttpError } from "../helpers/HttpError.js";
 import { createContactValidator } from "../schemas/contactsSchemas.js";
 import { Contacts } from "../models/userModel.js";
-
 export const checkUserId = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await getContactById(id);
 
-    if (!user) {
-      throw HttpError(404, "Not found");
-    }
+    const isIdValid = Types.ObjectId.isValid(id);
+    if (!isIdValid) throw HttpError(404, "Not found");
+
+    const user = await Contacts.findById(id);
+
+    if (!user) throw HttpError(404, "Not found");
 
     req.user = user;
     next();

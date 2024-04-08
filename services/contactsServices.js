@@ -1,15 +1,13 @@
-import { promises as fs } from "fs";
-import { nanoid } from "nanoid";
-import path from "path";
+// import { promises as fs } from "fs";
+// import { nanoid } from "nanoid";
+// import path from "path";
 
 import { Contacts } from "../models/userModel.js";
 
-const contactsPath = path.resolve("db", "contacts.json");
+// const contactsPath = path.resolve("db", "contacts.json");
 
 export async function listContacts() {
   try {
-    // const readResult = await fs.readFile(contactsPath);
-    // return JSON.parse(readResult);
     return await Contacts.find();
   } catch (e) {
     console.log(e.message);

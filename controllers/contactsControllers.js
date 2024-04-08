@@ -37,7 +37,6 @@ export const getOneContact = (req, res) => {
 
 export const deleteContact = async (req, res, next) => {
   try {
-    console.log(req.params);
     const { id } = req.params;
     const deleteUser = await removeContact(id);
 

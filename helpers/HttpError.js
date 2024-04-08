@@ -7,7 +7,9 @@ const messageList = {
 };
 
 const HttpError = (status, message = messageList[status], err) => {
-  const errorMessage = `Error: ${status} - ${message} - ${err}`;
+  const errorMessage = `Error: ${status} / ${message} / ${
+    err !== undefined ? err : ""
+  }`;
 
   const error = new Error(errorMessage);
   error.status = status;

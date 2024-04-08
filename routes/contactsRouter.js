@@ -7,7 +7,10 @@ import {
   getOneContact,
   updateContact,
 } from "../controllers/contactsControllers.js";
-import { checkUserId } from "../middleware/contactsMiddleware.js";
+import {
+  checkCreateContacts,
+  checkUserId,
+} from "../middleware/contactsMiddleware.js";
 
 const router = Router();
 
@@ -21,7 +24,7 @@ const router = Router();
  * DELETE       /contacts/:<userID>
  */
 
-router.route("/").post(createContact).get(getAllContacts);
+router.route("/").post(checkCreateContacts, createContact).get(getAllContacts);
 
 router.use("/:id", checkUserId);
 router

@@ -19,7 +19,7 @@ export const checkUserId = async (req, res, next) => {
   }
 };
 
-export const cheakCreateContacts = async (req, res, next) => {
+export const checkCreateContacts = async (req, res, next) => {
   try {
     const { value, errors } = createContactValidator(req.body);
 

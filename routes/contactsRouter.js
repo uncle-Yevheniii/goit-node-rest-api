@@ -1,22 +1,34 @@
-// import express from "express";
-// import {
-//   getAllContacts,
-//   getOneContact,
-//   deleteContact,
-//   createContact,
-//   updateContact,
-// } from "../controllers/contactsControllers.js";
+import { Router } from "express";
 
-// const contactsRouter = express.Router();
+import {
+  createContact,
+  deleteContact,
+  getAllContacts,
+  getOneContact,
+  updateContact,
+} from "../controllers/contactsControllers.js";
+import { checkUserId } from "../middleware/contactsMiddleware.js";
 
-// contactsRouter.get("/", getAllContacts);
+const router = Router();
 
-// contactsRouter.get("/:id", getOneContact);
+/**
+ * REST api
+ *
+ * POST         /contacts
+ * GET          /contacts
+ * GET          /contacts/:<userID>
+ * PUT          /contacts/:<userID>
+ * DELETE       /contacts/:<userID>
+ */
 
-// contactsRouter.delete("/:id", deleteContact);
+router.route("/").post(createContact).get(getAllContacts);
 
-// contactsRouter.post("/", createContact);
+router.use("/:id", checkUserId);
+router
+  .route("/:id")
+  .get(getOneContact)
+  .delete(deleteContact)
+  .put(updateContact)
+  .patch(updateContact);
 
-// contactsRouter.put("/:id", updateContact);
-
-// export default contactsRouter;
+export { router };

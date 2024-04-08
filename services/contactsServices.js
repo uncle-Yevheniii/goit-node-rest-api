@@ -2,40 +2,33 @@ import { promises as fs } from "fs";
 import { nanoid } from "nanoid";
 import path from "path";
 
-//path to the variable
-const contactsPath = path.resolve("db", "test.json"); //       !!!TEST!!!
-// const contactsPath = path.resolve("db", "contacts.json");
+const contactsPath = path.resolve("db", "contacts.json");
 
-// ================================================================
 export async function listContacts() {
   try {
-    // ...твій код. Повертає масив контактів.
-
     const readResult = await fs.readFile(contactsPath);
     return JSON.parse(readResult);
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.log(e.message);
+    return null;
   }
 }
 
-// ================================================================
 export async function getContactById(contactId) {
   try {
-    // ...твій код. Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
-
     const contactsJson = await listContacts();
     const contact = contactsJson.find((data) => data.id === contactId);
     return contact ? contact : null;
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 }
 
-// ================================================================
 export async function addContact(name, email, phone) {
   try {
-    // ...твій код. Повертає об'єкт доданого контакту (з id).
-
     const contactsJson = await listContacts();
     const createContact = { id: nanoid(), name, email, phone };
 
@@ -43,23 +36,49 @@ export async function addContact(name, email, phone) {
     await fs.writeFile(contactsPath, JSON.stringify(newContactsObj));
 
     return createContact;
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 }
 
-// ================================================================
-export async function removeContact(user) {
+export async function removeContact(contactId) {
   try {
-    // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-
-    const deleteUser = user;
+    const deleteUser = await getContactById(contactId);
     const contactsJson = await listContacts();
-    const visibleContacts = contactsJson.filter((data) => data.id !== user.id);
+    const visibleContacts = contactsJson.filter(
+      (data) => data.id !== contactId
+    );
 
     await fs.writeFile(contactsPath, JSON.stringify(visibleContacts));
     return deleteUser;
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+}
+
+export async function changeContact(id, value) {
+  try {
+    const prevContact = await getContactById(id);
+    const changedContact = { ...prevContact, ...value };
+    const userList = await listContacts();
+    const index = userList.findIndex((contact) => contact.id === id);
+    if (index !== -1) {
+      userList[index] = changedContact;
+    }
+
+    await fs.writeFile(contactsPath, JSON.stringify(userList));
+
+    return changedContact;
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 }

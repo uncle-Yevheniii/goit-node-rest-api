@@ -12,14 +12,15 @@ import {
 
 export const createContact = async (req, res, next) => {
   try {
-    const { value, errors } = createContactValidator(req.body);
-    const { name, email, phone } = value;
+    // const { value, errors } = createContactValidator(req.body);
+    // const { name, email, phone } = value;
+    // const { name, email, phone, favorite } = req.body;
 
-    if (errors) {
-      throw HttpError(400, "Invalid user data", errors);
-    }
+    // if (errors) {
+    //   throw HttpError(400, "Invalid user data", errors);
+    // }
 
-    const newUser = await addContact(name, email, phone);
+    const newUser = await addContact(req.body);
     res.status(201).json(newUser);
   } catch (error) {
     next(error);

@@ -5,6 +5,7 @@ import { Contacts } from "../models/userModel.js";
 import {
   createContactValidator,
   updateContactValidator,
+  updateStatusValidator,
 } from "../schemas/contactsSchemas.js";
 export const checkUserId = async (req, res, next) => {
   try {
@@ -57,6 +58,17 @@ export const checkUppdateContacs = async (req, res, next) => {
 };
 export const checkDeleteContacts = async (req, res, next) => {
   try {
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
+export const checkUppdateStatusContacs = async (req, res, next) => {
+  try {
+    const { value, errors } = updateStatusValidator(req.body);
+    if (errors) throw HttpError(400, "Invalid user data", errors);
+
+    req.body = value;
     next();
   } catch (e) {
     next(e);

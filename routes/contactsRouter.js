@@ -6,10 +6,12 @@ import {
   getAllContacts,
   getOneContact,
   updateContact,
+  updateStatusContact,
 } from "../controllers/contactsControllers.js";
 import {
   checkCreateContacts,
   checkUppdateContacs,
+  checkUppdateStatusContacs,
   checkUserId,
 } from "../middleware/contactsMiddleware.js";
 
@@ -34,5 +36,11 @@ router
   .delete(deleteContact)
   .put(checkUppdateContacs, updateContact)
   .patch(checkUppdateContacs, updateContact);
+
+router.use("/:id/favorite", checkUserId);
+router
+  .route("/:id/favorite")
+  .put(checkUppdateStatusContacs, updateStatusContact)
+  .patch(checkUppdateStatusContacs, updateStatusContact);
 
 export { router };

@@ -71,3 +71,16 @@ export const updateContact = async (req, res, next) => {
     next(e);
   }
 };
+export const updateStatusContact = async (req, res, next) => {
+  try {
+    const { body, user } = req;
+    const updatedStatus = await Contacts.findByIdAndUpdate(user.id, body, {
+      new: true,
+    });
+
+    res.status(200).json(updatedStatus);
+    next(e);
+  } catch (e) {
+    next(e);
+  }
+};

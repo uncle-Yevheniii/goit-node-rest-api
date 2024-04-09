@@ -9,6 +9,7 @@ import {
 } from "../controllers/contactsControllers.js";
 import {
   checkCreateContacts,
+  checkUppdateContacs,
   checkUserId,
 } from "../middleware/contactsMiddleware.js";
 
@@ -31,7 +32,7 @@ router
   .route("/:id")
   .get(getOneContact)
   .delete(deleteContact)
-  .put(updateContact)
-  .patch(updateContact);
+  .put(checkUppdateContacs, updateContact)
+  .patch(checkUppdateContacs, updateContact);
 
 export { router };

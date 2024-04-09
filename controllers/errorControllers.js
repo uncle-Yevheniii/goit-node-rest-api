@@ -7,5 +7,7 @@ export const errorGlobalHandler = (e, req, res, next) => {
         !e.status || e.status === 500 ? "Internal server error" : e.message,
     });
   }
-  res.status(e.status ?? 500).json({ message: e.message, data: e.data });
+  res
+    .status(e.status ?? 500)
+    .json({ message: e.message, data: e.data, stack: e.stack });
 };

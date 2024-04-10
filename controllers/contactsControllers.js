@@ -1,20 +1,13 @@
-// import { HttpError } from "../helpers/HttpError.js";
-// import {
-//   createContactValidator,
-//   updateContactValidator,
-// } from "../schemas/contactsSchemas.js";
-// import {
-//   addContact,
-//   changeContact,
-//   listContacts,
-//   removeContact,
-// } from "../services/contactsServices.js";
-import { Contacts } from "../models/userModel.js";
+import {
+  addContactServices,
+  changeContactServices,
+  listContactsServices,
+  removeContactServices,
+} from "../services/contactsServices.js";
 
 export const createContact = async (req, res, next) => {
   try {
-    // const newUser = await addContact(req.body);
-    const newUser = await Contacts.create(req.body);
+    const newUser = await addContactServices(req.body);
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -24,8 +17,7 @@ export const createContact = async (req, res, next) => {
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    // const allContacts = await listContacts();
-    const allContacts = await Contacts.find();
+    const allContacts = await listContactsServices();
 
     res.status(200).json(allContacts);
   } catch (e) {
@@ -42,10 +34,7 @@ export const getOneContact = (req, res) => {
 export const deleteContact = async (req, res, next) => {
   try {
     const { user } = req;
-    // const deleteUser = await removeContact(id);
-    console.log(user);
-
-    const deleteUser = await Contacts.findByIdAndDelete(user.id);
+    const deleteUser = await removeContactServices(user.id);
 
     res.status(200).json(deleteUser);
   } catch (e) {
@@ -56,27 +45,7 @@ export const deleteContact = async (req, res, next) => {
 export const updateContact = async (req, res, next) => {
   try {
     const { body, user } = req;
-    // const { value, errors } = updateContactValidator(req.body);
-
-    // if (errors) throw HttpError(400, "Invalid user data", errors);
-
-    // if (Object.keys(value).length === 0)
-    //   throw HttpError(400, "Body must have at least one field");
-
-    const updatedUser = await Contacts.findByIdAndUpdate(user.id, body, {
-      new: true,
-    });
-    res.status(200).json(updatedUser);
-  } catch (e) {
-    next(e);
-  }
-};
-export const updateStatusContact = async (req, res, next) => {
-  try {
-    const { body, user } = req;
-    const updatedStatus = await Contacts.findByIdAndUpdate(user.id, body, {
-      new: true,
-    });
+    const updatedStatus = await changeContactServices(user.id, body);
 
     res.status(200).json(updatedStatus);
     next(e);
@@ -84,3 +53,16 @@ export const updateStatusContact = async (req, res, next) => {
     next(e);
   }
 };
+
+// export const updateStatusContact = async (req, res, next) => {
+//   try {
+//     const { body, user } = req;
+//     const updatedUser = await Contacts.findByIdAndUpdate(user.id, body, {
+//       new: true,
+//     });
+
+//     res.status(200).json(updatedUser);
+//   } catch (e) {
+//     next(e);
+//   }
+// };

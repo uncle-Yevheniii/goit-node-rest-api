@@ -40,7 +40,7 @@ router
 router.use("/:id/favorite", checkUserId);
 router
   .route("/:id/favorite")
-  .put(checkUppdateStatusContacs, updateStatusContact)
-  .patch(checkUppdateStatusContacs, updateStatusContact);
+  .put(checkUppdateStatusContacs, updateContact)
+  .patch(checkUppdateStatusContacs, updateContact);
 
 export { router };

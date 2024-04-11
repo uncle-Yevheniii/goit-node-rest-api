@@ -1,4 +1,7 @@
 import { Contacts } from "../models/userModel.js";
+import { errorText } from "../constants/errorText.js";
+
+const { e500 } = errorText;
 
 export async function addContactServices(contactsData) {
   try {
@@ -7,9 +10,7 @@ export async function addContactServices(contactsData) {
     return newUser;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }
 
@@ -31,9 +32,7 @@ export async function removeContactServices(id) {
     return deleteUser;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }
 
@@ -46,9 +45,7 @@ export async function changeContactServices(id, contactsData) {
     return uppdatedUser;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }
 
@@ -59,9 +56,7 @@ export async function getContactByIdServices(id) {
     return contact;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }
 
@@ -72,8 +67,6 @@ export async function checkContactsExistsServices(filter) {
     return contactExist;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }

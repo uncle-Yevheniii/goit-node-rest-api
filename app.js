@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 
 import { router as contactsRouter } from "./routes/contactsRouter.js";
 import { errorGlobalHandler } from "./controllers/errorControllers.js";
+import { errorText } from "./constants/errorText.js";
+
+const { e404 } = errorText;
 
 dotenv.config();
 
@@ -36,7 +39,7 @@ app.use(`${pathPrefix}/contacts`, contactsRouter);
 
 // not-found-route
 app.all("*", (req, res) => {
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: e404 });
 });
 
 app.use(errorGlobalHandler);

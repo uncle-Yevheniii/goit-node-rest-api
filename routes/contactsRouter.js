@@ -6,7 +6,6 @@ import {
   getAllContacts,
   getOneContact,
   updateContact,
-  updateStatusContact,
 } from "../controllers/contactsControllers.js";
 import {
   checkCreateContacts,

@@ -7,7 +7,7 @@ import {
   updateStatusValidator,
 } from "../schemas/contactsSchemas.js";
 import {
-  getContactById,
+  getContactByIdServices,
   checkContactsExistsServices,
 } from "../services/contactsServices.js";
 
@@ -18,7 +18,7 @@ export const checkUserId = async (req, res, next) => {
     const isIdValid = Types.ObjectId.isValid(id);
     if (!isIdValid) throw HttpError(404, "Not found");
 
-    const contact = await getContactById(id);
+    const contact = await getContactByIdServices(id);
 
     if (!user) throw HttpError(404, "Not found");
 

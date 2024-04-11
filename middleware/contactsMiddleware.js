@@ -19,8 +19,7 @@ export const checkUserId = async (req, res, next) => {
     if (!isIdValid) throw HttpError(404, "Not found");
 
     const contact = await getContactByIdServices(id);
-
-    if (!user) throw HttpError(404, "Not found");
+    if (!contact) throw HttpError(404, "Not found");
 
     req.user = contact;
     next();

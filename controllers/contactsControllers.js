@@ -27,6 +27,7 @@ export const getAllContacts = async (req, res, next) => {
 
 export const getOneContact = (req, res) => {
   const { user } = req;
+  console.log(user);
 
   res.status(200).json(user);
 };

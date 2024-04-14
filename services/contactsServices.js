@@ -1,84 +1,72 @@
-import { promises as fs } from "fs";
-import { nanoid } from "nanoid";
-import path from "path";
+import { Contacts } from "../models/userModel.js";
+import { errorText } from "../constants/errorText.js";
 
-const contactsPath = path.resolve("db", "contacts.json");
+const { e500 } = errorText;
 
-export async function listContacts() {
+export async function addContactServices(contactsData) {
   try {
-    const readResult = await fs.readFile(contactsPath);
-    return JSON.parse(readResult);
+    const newUser = await Contacts.create(contactsData);
+
+    return newUser;
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: e500 });
+  }
+}
+
+export async function listContactsServices() {
+  try {
+    const allContacts = await Contacts.find();
+
+    return allContacts;
   } catch (e) {
     console.log(e.message);
     return null;
   }
 }
 
-export async function getContactById(contactId) {
+export async function removeContactServices(id) {
   try {
-    const contactsJson = await listContacts();
-    const contact = contactsJson.find((data) => data.id === contactId);
-    return contact ? contact : null;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-}
+    const deleteUser = await Contacts.findByIdAndDelete(id);
 
-export async function addContact(name, email, phone) {
-  try {
-    const contactsJson = await listContacts();
-    const createContact = { id: nanoid(), name, email, phone };
-
-    const newContactsObj = [...contactsJson, createContact];
-    await fs.writeFile(contactsPath, JSON.stringify(newContactsObj));
-
-    return createContact;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-}
-
-export async function removeContact(contactId) {
-  try {
-    const deleteUser = await getContactById(contactId);
-    const contactsJson = await listContacts();
-    const visibleContacts = contactsJson.filter(
-      (data) => data.id !== contactId
-    );
-
-    await fs.writeFile(contactsPath, JSON.stringify(visibleContacts));
     return deleteUser;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }
 
-export async function changeContact(id, value) {
+export async function changeContactServices(id, contactsData) {
   try {
-    const prevContact = await getContactById(id);
-    const changedContact = { ...prevContact, ...value };
-    const userList = await listContacts();
-    const index = userList.findIndex((contact) => contact.id === id);
-    if (index !== -1) {
-      userList[index] = changedContact;
-    }
+    const uppdatedUser = await Contacts.findByIdAndUpdate(id, contactsData, {
+      new: true,
+    });
 
-    await fs.writeFile(contactsPath, JSON.stringify(userList));
-
-    return changedContact;
+    return uppdatedUser;
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(500).json({ message: e500 });
   }
 }
+
+export async function getContactByIdServices(id) {
+  try {
+    const contact = await Contacts.findById(id);
+
+    return contact;
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: e500 });
+  }
+}
+
+// export async function checkContactsExistsServices(filter) {
+//   try {
+//     const contactExist = await Contacts.exists(filter);
+
+//     return contactExist;
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({ message: e500 });
+//   }
+// }

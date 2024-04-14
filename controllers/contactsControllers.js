@@ -1,25 +1,14 @@
-import { HttpError } from "../helpers/HttpError.js";
 import {
-  createContactValidator,
-  updateContactValidator,
-} from "../schemas/contactsSchemas.js";
-import {
-  addContact,
-  changeContact,
-  listContacts,
-  removeContact,
+  addContactServices,
+  changeContactServices,
+  listContactsServices,
+  removeContactServices,
 } from "../services/contactsServices.js";
 
 export const createContact = async (req, res, next) => {
   try {
-    const { value, errors } = createContactValidator(req.body);
-    const { name, email, phone } = value;
+    const newUser = await addContactServices(req.body);
 
-    if (errors) {
-      throw HttpError(400, "Invalid user data", errors);
-    }
-
-    const newUser = await addContact(name, email, phone);
     res.status(201).json(newUser);
   } catch (error) {
     next(error);
@@ -28,7 +17,7 @@ export const createContact = async (req, res, next) => {
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const allContacts = await listContacts();
+    const allContacts = await listContactsServices();
 
     res.status(200).json(allContacts);
   } catch (e) {
@@ -38,15 +27,15 @@ export const getAllContacts = async (req, res, next) => {
 
 export const getOneContact = (req, res) => {
   const { user } = req;
+  console.log(user);
 
   res.status(200).json(user);
 };
 
 export const deleteContact = async (req, res, next) => {
   try {
-    console.log(req.params);
-    const { id } = req.params;
-    const deleteUser = await removeContact(id);
+    const { user } = req;
+    const deleteUser = await removeContactServices(user.id);
 
     res.status(200).json(deleteUser);
   } catch (e) {
@@ -56,20 +45,25 @@ export const deleteContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { value, errors } = updateContactValidator(req.body);
+    const { body, user } = req;
+    const updatedStatus = await changeContactServices(user.id, body);
 
-    if (errors) {
-      throw HttpError(400, "Invalid user data", errors);
-    }
-
-    if (Object.keys(value).length === 0) {
-      throw HttpError(400, "Body must have at least one field");
-    }
-
-    const updatedUser = await changeContact(id, value);
-    res.status(200).json(updatedUser);
+    res.status(200).json(updatedStatus);
+    next(e);
   } catch (e) {
     next(e);
   }
 };
+
+// export const updateStatusContact = async (req, res, next) => {
+//   try {
+//     const { body, user } = req;
+//     const updatedUser = await Contacts.findByIdAndUpdate(user.id, body, {
+//       new: true,
+//     });
+
+//     res.status(200).json(updatedUser);
+//   } catch (e) {
+//     next(e);
+//   }
+// };

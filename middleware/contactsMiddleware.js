@@ -1,16 +1,12 @@
 import { Types } from "mongoose";
 
 import { HttpError } from "../helpers/HttpError.js";
-import {
-  createContactValidator,
-  updateContactValidator,
-  updateStatusValidator,
-} from "../schemas/contactsSchemas.js";
-import {
-  getContactByIdServices,
-  checkContactsExistsServices,
-} from "../services/contactsServices.js";
+import { createContactValidator } from "../schemas/contactsSchemas.js";
+import { updateContactValidator } from "../schemas/contactsSchemas.js";
+import { updateStatusValidator } from "../schemas/contactsSchemas.js";
+import { getContactByIdServices } from "../services/contactsServices.js";
 import { errorText } from "../constants/errorText.js";
+// import { checkContactsExistsServices } from "../services/contactsServices.js";
 
 const { e400, e404, e409 } = errorText;
 export const checkUserId = async (req, res, next) => {

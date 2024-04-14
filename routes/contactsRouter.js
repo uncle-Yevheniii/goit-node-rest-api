@@ -1,18 +1,14 @@
 import { Router } from "express";
 
-import {
-  createContact,
-  deleteContact,
-  getAllContacts,
-  getOneContact,
-  updateContact,
-} from "../controllers/contactsControllers.js";
-import {
-  checkCreateContacts,
-  checkUppdateContacs,
-  checkUppdateStatusContacs,
-  checkUserId,
-} from "../middleware/contactsMiddleware.js";
+import { createContact } from "../controllers/contactsControllers.js";
+import { deleteContact } from "../controllers/contactsControllers.js";
+import { getAllContacts } from "../controllers/contactsControllers.js";
+import { getOneContact } from "../controllers/contactsControllers.js";
+import { updateContact } from "../controllers/contactsControllers.js";
+import { checkCreateContacts } from "../middleware/contactsMiddleware.js";
+import { checkUppdateContacs } from "../middleware/contactsMiddleware.js";
+import { checkUppdateStatusContacs } from "../middleware/contactsMiddleware.js";
+import { checkUserId } from "../middleware/contactsMiddleware.js";
 
 const router = Router();
 

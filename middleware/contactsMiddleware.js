@@ -31,11 +31,6 @@ export const checkCreateContacts = async (req, res, next) => {
 
     if (errors) throw HttpError(400, e400, errors);
 
-    // const contactExist = await checkContactsExistsServices({
-    //   email: value.email,
-    // });
-    // if (contactExist) throw HttpError(409, e409);
-
     req.body = value;
     next();
   } catch (e) {

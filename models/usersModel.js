@@ -19,10 +19,10 @@ const userSchema = Schema(
       enum: Object.values(userSubscription),
       default: "starter",
     },
-    token: {
-      type: String,
-      default: null,
-    },
+    // token: {
+    //   type: String,
+    //   default: null,
+    // },
   },
   {
     timestamps: true,

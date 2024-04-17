@@ -59,14 +59,3 @@ export async function getContactByIdServices(id) {
     return res.status(500).json({ message: e500 });
   }
 }
-
-// export async function checkContactsExistsServices(filter) {
-//   try {
-//     const contactExist = await Contacts.exists(filter);
-
-//     return contactExist;
-//   } catch (e) {
-//     console.log(e);
-//     return res.status(500).json({ message: e500 });
-//   }
-// }

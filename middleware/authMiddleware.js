@@ -2,7 +2,7 @@ import { errorText } from "../constants/errorText.js";
 import { HttpError } from "../helpers/HttpError.js";
 import { createContactValidator } from "../schemas/authSchemas.js";
 import { checkRegisterExistsServices } from "../services/authServices.js";
-import { createPasswordHash } from "../services/authServices.js";
+import { createPasswordHashService } from "../services/authServices.js";
 
 const { e400, e409 } = errorText;
 
@@ -28,7 +28,7 @@ export const hashingPassword = async (req, res, next) => {
   try {
     const { password, ...restUserData } = req.body;
 
-    const passwordHash = await createPasswordHash(password);
+    const passwordHash = await createPasswordHashService(password);
 
     req.body = { ...restUserData, password: passwordHash };
 

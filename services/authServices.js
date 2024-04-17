@@ -17,7 +17,7 @@ export async function checkRegisterExistsServices(filter) {
   }
 }
 
-export async function createPasswordHash(userData) {
+export async function createPasswordHashService(userData) {
   try {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(userData, salt);
@@ -28,6 +28,7 @@ export async function createPasswordHash(userData) {
     return res.status(500).json({ message: e500 });
   }
 }
+
 export async function registerUserService(userData) {
   try {
     const newUser = await User.create({
@@ -42,3 +43,14 @@ export async function registerUserService(userData) {
     return res.status(500).json({ message: e500 });
   }
 }
+
+// export async function isValidPasswordService(userData) {
+//   try {
+//     const isValidPass = await bcrypt.compare();
+
+//     return isValidPass;
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({ message: e500 });
+//   }
+// }

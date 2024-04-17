@@ -5,6 +5,7 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 
 import { router as contactsRouter } from "./routes/contactsRouter.js";
+import { router as authRouter } from "./routes/authRouter.js";
 import { errorGlobalHandler } from "./controllers/errorControllers.js";
 import { errorText } from "./constants/errorText.js";
 
@@ -35,6 +36,7 @@ app.use(cors());
  * routes
  */
 const pathPrefix = "/api";
+app.use(`${pathPrefix}/users`, authRouter);
 app.use(`${pathPrefix}/contacts`, contactsRouter);
 
 // not-found-route

@@ -1,4 +1,4 @@
-import { Contacts } from "../models/userModel.js";
+import { Contacts } from "../models/contactsModel.js";
 import { errorText } from "../constants/errorText.js";
 
 const { e500 } = errorText;

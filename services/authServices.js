@@ -50,14 +50,13 @@ export async function logInUserService(userData) {
     const { password, email } = userData;
 
     const user = await User.findOne({ email });
-    if (!user) throw new HttpError(401, e401);
+    if (!user) throw HttpError(401, e401);
 
     const passIsValid = await bcrypt.compare(password, user.password);
-    if (!passIsValid) throw new HttpError(401, e401);
+    if (!passIsValid) throw HttpError(401, e401);
 
     user.password = undefined;
 
-    console.log(user);
     return user;
   } catch (e) {
     console.log(e);

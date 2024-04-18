@@ -47,7 +47,6 @@ export const updateContact = async (req, res, next) => {
     const updatedStatus = await changeContactServices(user.id, body);
 
     res.status(200).json(updatedStatus);
-    next(e);
   } catch (e) {
     next(e);
   }

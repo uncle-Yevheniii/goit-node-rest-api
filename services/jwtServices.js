@@ -21,6 +21,8 @@ export const checkTokenService = (token) => {
 
     return id;
   } catch (e) {
+    console.log("jwt", e);
+
     throw new HttpError(401, e401);
   }
 };

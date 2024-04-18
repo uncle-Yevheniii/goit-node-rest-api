@@ -1,5 +1,4 @@
 import { model, Schema } from "mongoose";
-// import bcrypt from "bcrypt";
 
 import { userSubscription } from "../constants/userSubscription.js";
 
@@ -19,10 +18,10 @@ const userSchema = Schema(
       enum: Object.values(userSubscription),
       default: "starter",
     },
-    // token: {
-    //   type: String,
-    //   default: null,
-    // },
+    token: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -31,15 +30,3 @@ const userSchema = Schema(
 );
 
 export const User = model("User", userSchema);
-
-// userSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) return next();
-
-//   const salt = await bcrypt.genSalt(10);
-//   this.password = await bcrypt.hash(this.password, salt);
-
-//   next();
-// });
-
-// userSchema.methods.checkUserPassword = (candidate, passwordHash) =>
-//   bcrypt.compare(candidate, passwordHash);

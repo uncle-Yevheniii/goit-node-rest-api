@@ -24,8 +24,8 @@ export const registerUserService = async (userData) => {
 
   newUser.password = undefined;
 
-  const token = singnTokenService(newUser.id);
-  newUser.token = token;
+  // const token = singnTokenService(newUser.id);
+  // newUser.token = token;
 
   return newUser;
 };
@@ -37,10 +37,11 @@ export const logInUserService = async ({ email, password }) => {
   const passIsValid = await checkPasswordHashService(password, user.password);
   if (!passIsValid) throw HttpError(401, e401);
 
-  user.password = undefined;
-
   const token = singnTokenService(user.id);
   user.token = token;
+  await user.save();
+
+  user.password = undefined;
 
   return user;
 };

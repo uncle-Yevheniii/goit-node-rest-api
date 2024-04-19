@@ -1,65 +1,46 @@
-import bcrypt from "bcrypt";
-
 import { errorText } from "../constants/errorText.js";
 import { userSubscription } from "../constants/userSubscription.js";
 import { User } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
+import { singnTokenService } from "./jwtServices.js";
+import { checkPasswordHashService } from "./passwordHashService.js";
+import { createPasswordHashService } from "./passwordHashService.js";
 
-const { e401, e500 } = errorText;
+const { e401 } = errorText;
 
-export async function checkRegisterExistsServices(filter) {
-  try {
-    const contactExist = await User.exists(filter);
+export const checkRegisterExistsServices = async (filter) => {
+  const contactExist = await User.exists(filter);
+  return contactExist;
+};
 
-    return contactExist;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+export const registerUserService = async (userData) => {
+  const passwordHash = await createPasswordHashService(userData.password);
 
-export async function createPasswordHashService(userData) {
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(userData, salt);
+  const newUser = await User.create({
+    ...userData,
+    password: passwordHash,
+    subscription: userSubscription.STARTER,
+  });
 
-    return passwordHash;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  newUser.password = undefined;
 
-export async function registerUserService(userData) {
-  try {
-    const newUser = await User.create({
-      ...userData,
-      subscription: userSubscription.STARTER,
-    });
-    newUser.password = undefined;
+  const token = singnTokenService(newUser.id);
+  newUser.token = token;
 
-    return newUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  return newUser;
+};
 
-export async function logInUserService(userData) {
-  try {
-    const { password, email } = userData;
+export const logInUserService = async ({ email, password }) => {
+  const user = await User.findOne({ email });
+  if (!user) throw HttpError(401, e401);
 
-    const user = await User.findOne({ email });
-    if (!user) throw HttpError(401, e401);
+  const passIsValid = await checkPasswordHashService(password, user.password);
+  if (!passIsValid) throw HttpError(401, e401);
 
-    const passIsValid = await bcrypt.compare(password, user.password);
-    if (!passIsValid) throw HttpError(401, e401);
+  user.password = undefined;
 
-    user.password = undefined;
+  const token = singnTokenService(user.id);
+  user.token = token;
 
-    return user;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  return user;
+};

@@ -14,13 +14,13 @@ export const singnTokenService = (id) => {
 };
 
 export const checkTokenService = (token) => {
-  if (!token) throw new HttpError(401, e401);
+  if (!token) throw HttpError(401, e401);
 
   try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     return id;
   } catch (e) {
-    throw new HttpError(401, e401);
+    throw HttpError(401, e401);
   }
 };

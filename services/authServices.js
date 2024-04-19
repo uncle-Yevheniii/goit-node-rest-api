@@ -45,3 +45,19 @@ export const logInUserService = async ({ email, password }) => {
 
   return user;
 };
+
+export const getFindOneUserByIdService = async (id) => {
+  const contact = await User.findById(id);
+
+  return contact;
+};
+
+export const logOutUserService = async (id) => {
+  const user = await User.findById(id);
+  if (!user) throw HttpError(401, e401);
+
+  user.token = null;
+  await user.save();
+
+  return user;
+};

@@ -8,8 +8,8 @@ export const createContact = async (req, res, next) => {
     const newUser = await addContactServices(req.body);
 
     res.status(201).json(newUser);
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
   }
 };
 

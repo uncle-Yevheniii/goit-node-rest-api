@@ -1,61 +1,33 @@
 import { Contacts } from "../models/contactsModel.js";
-import { errorText } from "../constants/errorText.js";
 
-const { e500 } = errorText;
+export const addContactServices = async (contactsData) => {
+  const newUser = await Contacts.create(contactsData);
 
-export async function addContactServices(contactsData) {
-  try {
-    const newUser = await Contacts.create(contactsData);
+  return newUser;
+};
 
-    return newUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+export const listContactsServices = async () => {
+  const allContacts = await Contacts.find();
 
-export async function listContactsServices() {
-  try {
-    const allContacts = await Contacts.find();
+  return allContacts;
+};
 
-    return allContacts;
-  } catch (e) {
-    console.log(e.message);
-    return null;
-  }
-}
+export const removeContactServices = async (id) => {
+  const deleteUser = await Contacts.findByIdAndDelete(id);
 
-export async function removeContactServices(id) {
-  try {
-    const deleteUser = await Contacts.findByIdAndDelete(id);
+  return deleteUser;
+};
 
-    return deleteUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+export const changeContactServices = async (id, contactsData) => {
+  const uppdatedUser = await Contacts.findByIdAndUpdate(id, contactsData, {
+    new: true,
+  });
 
-export async function changeContactServices(id, contactsData) {
-  try {
-    const uppdatedUser = await Contacts.findByIdAndUpdate(id, contactsData, {
-      new: true,
-    });
+  return uppdatedUser;
+};
 
-    return uppdatedUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+export const getContactByIdServices = async (id) => {
+  const contact = await Contacts.findById(id);
 
-export async function getContactByIdServices(id) {
-  try {
-    const contact = await Contacts.findById(id);
-
-    return contact;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  return contact;
+};

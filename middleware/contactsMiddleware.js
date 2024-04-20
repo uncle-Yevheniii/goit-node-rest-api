@@ -6,9 +6,9 @@ import { updateContactValidator } from "../schemas/contactsSchemas.js";
 import { updateStatusValidator } from "../schemas/contactsSchemas.js";
 import { getContactByIdServices } from "../services/contactsServices.js";
 import { errorText } from "../constants/errorText.js";
-// import { checkContactsExistsServices } from "../services/contactsServices.js";
 
-const { e400, e404, e409 } = errorText;
+const { e400, e404 } = errorText;
+
 export const checkUserId = async (req, res, next) => {
   try {
     const { id } = req.params;

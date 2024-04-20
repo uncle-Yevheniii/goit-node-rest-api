@@ -9,6 +9,7 @@ import { checkCreateContacts } from "../middleware/contactsMiddleware.js";
 import { checkUppdateContacs } from "../middleware/contactsMiddleware.js";
 import { checkUppdateStatusContacs } from "../middleware/contactsMiddleware.js";
 import { checkUserId } from "../middleware/contactsMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
@@ -21,6 +22,8 @@ const router = Router();
  * PUT          /contacts/:<userID>
  * DELETE       /contacts/:<userID>
  */
+
+router.use(protect);
 
 router.route("/").post(checkCreateContacts, createContact).get(getAllContacts);
 

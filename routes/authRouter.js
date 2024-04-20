@@ -10,9 +10,9 @@ import { currentUserController } from "../controllers/authControllers.js";
 
 const router = Router();
 
-router.post("/register", checkRegisterData, registerController);
-router.post("/login", checkLogInData, logInController);
-router.get("/current", protect, currentUserController);
-router.post("/logout", protect, logOutController);
+router.route("/register").post(checkRegisterData, registerController);
+router.route("/login").post(checkLogInData, logInController);
+router.route("/logout").post(protect, logOutController);
+router.route("/current").get(protect, currentUserController);
 
 export { router };

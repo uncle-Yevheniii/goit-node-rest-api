@@ -1,9 +1,18 @@
+import { errorText } from "../constants/errorText.js";
+import { HttpError } from "../helpers/HttpError.js";
 import { Contacts } from "../models/contactsModel.js";
 
-export const addContactServices = async (contactsData) => {
-  const newUser = await Contacts.create(contactsData);
+const { e404 } = errorText;
 
-  return newUser;
+export const addContactServices = async ({ name, email, phone }, owner) => {
+  const newContact = await Contacts.create({
+    name,
+    email,
+    phone,
+    owner: owner.id,
+  });
+
+  return newContact;
 };
 
 export const listContactsServices = async () => {
@@ -26,8 +35,11 @@ export const changeContactServices = async (id, contactsData) => {
   return uppdatedUser;
 };
 
-export const getContactByIdServices = async (id) => {
+export const getContactByIdServices = async (id, owner) => {
   const contact = await Contacts.findById(id);
+
+  if (!contact || contact.owner.toString() !== owner.id)
+    throw HttpError(404, e404);
 
   return contact;
 };

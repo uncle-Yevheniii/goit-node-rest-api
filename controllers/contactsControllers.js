@@ -5,9 +5,10 @@ import { removeContactServices } from "../services/contactsServices.js";
 
 export const createContact = async (req, res, next) => {
   try {
-    const newUser = await addContactServices(req.body);
+    console.log(req.user);
+    const newContact = await addContactServices(req.body, req.user);
 
-    res.status(201).json(newUser);
+    res.status(201).json(newContact);
   } catch (e) {
     next(e);
   }
@@ -24,10 +25,9 @@ export const getAllContacts = async (req, res, next) => {
 };
 
 export const getOneContact = (req, res) => {
-  const { user } = req;
-  console.log(user);
+  const { contact } = req;
 
-  res.status(200).json(user);
+  res.status(200).json(contact);
 };
 
 export const deleteContact = async (req, res, next) => {

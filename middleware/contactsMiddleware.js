@@ -12,13 +12,14 @@ const { e400, e404 } = errorText;
 export const checkUserId = async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const isIdValid = Types.ObjectId.isValid(id);
     if (!isIdValid) throw HttpError(404, e404);
 
-    const contact = await getContactByIdServices(id);
+    const contact = await getContactByIdServices(id, req.user);
     if (!contact) throw HttpError(404, e404);
 
-    req.user = contact;
+    req.contact = contact;
     next();
   } catch (e) {
     next(e);

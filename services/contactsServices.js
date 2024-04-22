@@ -9,28 +9,34 @@ export const addContactServices = async ({ name, email, phone }, owner) => {
     name,
     email,
     phone,
-    owner: owner.id,
+    owner,
   });
 
   return newContact;
 };
 
-export const listContactsServices = async () => {
-  const allContacts = await Contacts.find();
+export const listContactsServices = async (owner) => {
+  const allContacts = await Contacts.find({ owner });
 
   return allContacts;
 };
 
-export const removeContactServices = async (id) => {
+export const removeContactServices = async ({ id }, owner) => {
   const deleteUser = await Contacts.findByIdAndDelete(id);
+
+  if (!deleteUser || deleteUser.owner.toString() !== owner.id)
+    throw HttpError(404, e404);
 
   return deleteUser;
 };
 
-export const changeContactServices = async (id, contactsData) => {
+export const changeContactServices = async ({ id }, contactsData, owner) => {
   const uppdatedUser = await Contacts.findByIdAndUpdate(id, contactsData, {
     new: true,
   });
+
+  if (!uppdatedUser || uppdatedUser.owner.toString() !== owner.id)
+    throw HttpError(404, e404);
 
   return uppdatedUser;
 };

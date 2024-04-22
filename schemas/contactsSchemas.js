@@ -23,12 +23,13 @@ export const updateContactValidator = joiValidator((data) =>
       name: Joi.string().min(3).max(30),
       email: Joi.string().email(),
       phone: Joi.string().regex(PHONE_REGEX),
+      owner: Joi.string(),
     })
     .validate(data)
 );
 export const updateStatusValidator = joiValidator((data) =>
   Joi.object()
     .options({ abortEarly: false })
-    .keys({ favorite: Joi.boolean() })
+    .keys({ favorite: Joi.boolean(), owner: Joi.string() })
     .validate(data)
 );

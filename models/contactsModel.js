@@ -11,7 +11,7 @@ const contactsSchema = new Schema(
     },
     phone: {
       type: String,
-      unique: true,
+      // unique: true, - цей парамтр псує логіку застосунку.
     },
     favorite: {
       type: Boolean,

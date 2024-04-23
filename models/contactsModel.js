@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const userSchema = new Schema(
+const contactsSchema = new Schema(
   {
     name: {
       type: String,
@@ -8,14 +8,19 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      unique: true,
     },
     phone: {
       type: String,
+      // unique: true, - цей парамтр псує логіку застосунку.
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   {
@@ -24,4 +29,4 @@ const userSchema = new Schema(
   }
 );
 
-export const Contacts = model("Contacts", userSchema);
+export const Contacts = model("Contacts", contactsSchema);

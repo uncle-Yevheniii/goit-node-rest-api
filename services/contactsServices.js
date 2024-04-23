@@ -1,72 +1,51 @@
-import { Contacts } from "../models/userModel.js";
 import { errorText } from "../constants/errorText.js";
+import { HttpError } from "../helpers/HttpError.js";
+import { Contacts } from "../models/contactsModel.js";
 
-const { e500 } = errorText;
+const { e404 } = errorText;
 
-export async function addContactServices(contactsData) {
-  try {
-    const newUser = await Contacts.create(contactsData);
+export const addContactServices = async ({ name, email, phone }, owner) => {
+  const newContact = await Contacts.create({
+    name,
+    email,
+    phone,
+    owner,
+  });
 
-    return newUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  return newContact;
+};
 
-export async function listContactsServices() {
-  try {
-    const allContacts = await Contacts.find();
+export const listContactsServices = async (owner) => {
+  const allContacts = await Contacts.find({ owner });
 
-    return allContacts;
-  } catch (e) {
-    console.log(e.message);
-    return null;
-  }
-}
+  return allContacts;
+};
 
-export async function removeContactServices(id) {
-  try {
-    const deleteUser = await Contacts.findByIdAndDelete(id);
+export const removeContactServices = async ({ id }, owner) => {
+  const deleteUser = await Contacts.findByIdAndDelete(id);
 
-    return deleteUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  if (!deleteUser || deleteUser.owner.toString() !== owner.id)
+    throw HttpError(404, e404);
 
-export async function changeContactServices(id, contactsData) {
-  try {
-    const uppdatedUser = await Contacts.findByIdAndUpdate(id, contactsData, {
-      new: true,
-    });
+  return deleteUser;
+};
 
-    return uppdatedUser;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+export const changeContactServices = async ({ id }, contactsData, owner) => {
+  const uppdatedUser = await Contacts.findByIdAndUpdate(id, contactsData, {
+    new: true,
+  });
 
-export async function getContactByIdServices(id) {
-  try {
-    const contact = await Contacts.findById(id);
+  if (!uppdatedUser || uppdatedUser.owner.toString() !== owner.id)
+    throw HttpError(404, e404);
 
-    return contact;
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: e500 });
-  }
-}
+  return uppdatedUser;
+};
 
-// export async function checkContactsExistsServices(filter) {
-//   try {
-//     const contactExist = await Contacts.exists(filter);
+export const getContactByIdServices = async (id, owner) => {
+  const contact = await Contacts.findById(id);
 
-//     return contactExist;
-//   } catch (e) {
-//     console.log(e);
-//     return res.status(500).json({ message: e500 });
-//   }
-// }
+  if (!contact || contact.owner.toString() !== owner.id)
+    throw HttpError(404, e404);
+
+  return contact;
+};

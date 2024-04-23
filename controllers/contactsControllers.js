@@ -1,23 +1,21 @@
-import {
-  addContactServices,
-  changeContactServices,
-  listContactsServices,
-  removeContactServices,
-} from "../services/contactsServices.js";
+import { addContactServices } from "../services/contactsServices.js";
+import { changeContactServices } from "../services/contactsServices.js";
+import { listContactsServices } from "../services/contactsServices.js";
+import { removeContactServices } from "../services/contactsServices.js";
 
 export const createContact = async (req, res, next) => {
   try {
-    const newUser = await addContactServices(req.body);
+    const newContact = await addContactServices(req.body, req.user);
 
-    res.status(201).json(newUser);
-  } catch (error) {
-    next(error);
+    res.status(201).json(newContact);
+  } catch (e) {
+    next(e);
   }
 };
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const allContacts = await listContactsServices();
+    const allContacts = await listContactsServices(req.user);
 
     res.status(200).json(allContacts);
   } catch (e) {
@@ -26,16 +24,14 @@ export const getAllContacts = async (req, res, next) => {
 };
 
 export const getOneContact = (req, res) => {
-  const { user } = req;
-  console.log(user);
+  const { contact } = req;
 
-  res.status(200).json(user);
+  res.status(200).json(contact);
 };
 
 export const deleteContact = async (req, res, next) => {
   try {
-    const { user } = req;
-    const deleteUser = await removeContactServices(user.id);
+    const deleteUser = await removeContactServices(req.contact, req.user);
 
     res.status(200).json(deleteUser);
   } catch (e) {
@@ -45,11 +41,13 @@ export const deleteContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    const { body, user } = req;
-    const updatedStatus = await changeContactServices(user.id, body);
+    const updatedStatus = await changeContactServices(
+      req.contact,
+      req.body,
+      req.user
+    );
 
     res.status(200).json(updatedStatus);
-    next(e);
   } catch (e) {
     next(e);
   }

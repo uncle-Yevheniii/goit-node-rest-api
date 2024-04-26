@@ -1,4 +1,7 @@
-import { logOutUserService } from "../services/authServices.js";
+import {
+  logOutUserService,
+  uppdateAvatarService,
+} from "../services/authServices.js";
 import { logInUserService } from "../services/authServices.js";
 import { registerUserService } from "../services/authServices.js";
 
@@ -37,9 +40,16 @@ export const logOutController = async (req, res, next) => {
 
 export const currentUserController = async (req, res, next) => {
   try {
-    const { email, subscription } = req.user;
+    res.status(200).json({ user: { email, subscription, avatarURL } });
+  } catch (e) {
+    next(e);
+  }
+};
 
-    res.status(200).json({ user: { email, subscription } });
+export const uppdateUserAvatarController = async (req, res, next) => {
+  try {
+    const user = await uppdateAvatarService(req.user, req.file);
+    res.status(200).json(user);
   } catch (e) {
     next(e);
   }

@@ -6,8 +6,9 @@ import { singnTokenService } from "./jwtServices.js";
 import { checkPasswordHashService } from "./passwordHashService.js";
 import { createPasswordHashService } from "./passwordHashService.js";
 import { createUserGravartarServises } from "./gravatarServises.js";
+import { saveImageServices } from "./imageServices.js";
 
-const { e401 } = errorText;
+const { e401, e400 } = errorText;
 
 export const checkRegisterExistsServices = async (filter) => {
   const contactExist = await User.exists(filter);
@@ -63,4 +64,28 @@ export const logOutUserService = async (id) => {
   await user.save();
 
   return user;
+};
+
+export const uppdateAvatarService = async (user, file) => {
+  if (!file) HttpError(400, e400);
+  // const userPath = file.path.replace("public", "");
+
+  const saveImage = await saveImageServices(
+    file,
+    {
+      maxFileSize: 2,
+      width: 400,
+      height: 400,
+    },
+    "avatars",
+    user.id
+  );
+
+  const userAvatar = await User.findByIdAndUpdate(
+    user.id,
+    { avatarURL: saveImage },
+    { new: true }
+  );
+
+  return userAvatar;
 };

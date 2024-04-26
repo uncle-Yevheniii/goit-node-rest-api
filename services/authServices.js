@@ -5,6 +5,7 @@ import { HttpError } from "../helpers/HttpError.js";
 import { singnTokenService } from "./jwtServices.js";
 import { checkPasswordHashService } from "./passwordHashService.js";
 import { createPasswordHashService } from "./passwordHashService.js";
+import { createUserGravartarServises } from "./gravatarServises.js";
 
 const { e401 } = errorText;
 
@@ -15,11 +16,13 @@ export const checkRegisterExistsServices = async (filter) => {
 
 export const registerUserService = async (userData) => {
   const passwordHash = await createPasswordHashService(userData.password);
+  const userGravatar = createUserGravartarServises(userData.email);
 
   const newUser = await User.create({
     ...userData,
     password: passwordHash,
     subscription: userSubscription.STARTER,
+    avatarURL: userGravatar,
   });
 
   newUser.password = undefined;

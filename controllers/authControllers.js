@@ -5,9 +5,9 @@ import { registerUserService } from "../services/authServices.js";
 export const registerController = async (req, res, next) => {
   try {
     const newUser = await registerUserService(req.body);
-    const { email, subscription } = newUser;
+    const { email, subscription, avatarURL } = newUser;
 
-    res.status(201).json({ user: { email, subscription } });
+    res.status(201).json({ user: { email, subscription, avatarURL } });
   } catch (e) {
     next(e);
   }
@@ -16,9 +16,9 @@ export const registerController = async (req, res, next) => {
 export const logInController = async (req, res, next) => {
   try {
     const user = await logInUserService(req.body);
-    const { token, email, subscription } = user;
+    const { token, email, subscription, avatarURL } = user;
 
-    res.status(200).json({ token, user: { email, subscription } });
+    res.status(200).json({ token, user: { email, subscription, avatarURL } });
   } catch (e) {
     next(e);
   }

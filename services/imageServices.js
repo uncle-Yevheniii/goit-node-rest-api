@@ -35,15 +35,20 @@ export const saveImageServices = async (file, options, ...pathSegments) => {
   const fullFilePath = path.join(process.cwd(), "public", ...pathSegments);
 
   await fse.ensureDir(fullFilePath);
-  await jimp.read(file.buffer, (e, img) => {
-    try {
-      img.resize(options?.width ?? 200, options?.height ?? 200);
-      img.quality(options?.quality ?? 85);
-      img.write(fullFilePath, fileName);
-    } catch (e) {
-      HttpError(400, "err");
-    }
-  });
+  // await jimp.read(file.buffer, (e, img) => {
+  //   try {
+  //     img.resize(options?.width ?? 200, options?.height ?? 200);
+  //     img.quality(options?.quality ?? 85);
+  //     img.write(fullFilePath, fileName);
+  //   } catch (e) {
+  //     HttpError(400, "err");
+  //   }
+  // });
+  const avatar = await jimp.read(file.buffer);
+  await avatar
+    .cover(options?.width ?? 300, options?.height ?? 300)
+    .quality(90)
+    .writeAsync(path.join(fullFilePath, fileName));
 
   return path.join(...pathSegments, fileName);
 };

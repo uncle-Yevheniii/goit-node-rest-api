@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { checkLogInData } from "../middleware/authMiddleware.js";
-import { uploadAvatar } from "../middleware/authMiddleware.js";
+import { uploadAvatar } from "../middleware/imageMiddleware.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { checkRegisterData } from "../middleware/authMiddleware.js";
 import { logInController } from "../controllers/authControllers.js";
@@ -19,8 +19,8 @@ router.route("/current").get(protect, currentUserController);
 router
   .route("/avatars")
   .patch(protect, uploadAvatar, uppdateUserAvatarController);
-// router
-//   .route("/avatars")
-//   .put(protect, uploadAvatar, uppdateUserAvatarController);
+router
+  .route("/avatars")
+  .put(protect, uploadAvatar, uppdateUserAvatarController);
 
 export { router };

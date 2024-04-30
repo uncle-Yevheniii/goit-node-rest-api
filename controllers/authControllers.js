@@ -1,7 +1,5 @@
-import {
-  logOutUserService,
-  uppdateAvatarService,
-} from "../services/authServices.js";
+import { logOutUserService } from "../services/authServices.js";
+import { uppdateUserAvatarService } from "../services/authServices.js";
 import { logInUserService } from "../services/authServices.js";
 import { registerUserService } from "../services/authServices.js";
 
@@ -50,8 +48,11 @@ export const currentUserController = async (req, res, next) => {
 
 export const uppdateUserAvatarController = async (req, res, next) => {
   try {
-    const user = await uppdateAvatarService(req.user, req.file);
-    res.status(200).json(user);
+    const uppdatedUser = await uppdateUserAvatarService(req.user, req.file);
+
+    res
+      .status(200)
+      .json({ ResponseBody: { avatarURL: uppdatedUser.avatarURL } });
   } catch (e) {
     next(e);
   }

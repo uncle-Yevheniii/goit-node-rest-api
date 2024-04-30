@@ -6,9 +6,9 @@ import { singnTokenService } from "./jwtServices.js";
 import { checkPasswordHashService } from "./passwordHashService.js";
 import { createPasswordHashService } from "./passwordHashService.js";
 import { createUserGravartarServises } from "./gravatarServises.js";
-import { saveImageServices } from "./imageServices.js";
+import { saveImageService } from "./jimpImageService.js";
 
-const { e401, e400 } = errorText;
+const { e401 } = errorText;
 
 export const checkRegisterExistsServices = async (filter) => {
   const contactExist = await User.exists(filter);
@@ -27,9 +27,6 @@ export const registerUserService = async (userData) => {
   });
 
   newUser.password = undefined;
-
-  // const token = singnTokenService(newUser.id);
-  // newUser.token = token;
 
   return newUser;
 };
@@ -66,24 +63,12 @@ export const logOutUserService = async (id) => {
   return user;
 };
 
-export const uppdateAvatarService = async (user, file) => {
-  if (!file) HttpError(400, e400);
-  // const userPath = file.path.replace("public", "");
-
-  const saveImage = await saveImageServices(
-    file,
-    {
-      maxFileSize: 2,
-      width: 400,
-      height: 400,
-    },
-    "avatars",
-    user.id
-  );
+export const uppdateUserAvatarService = async (user, file) => {
+  const editedImageAndPath = await saveImageService(file, "avatars", user.id);
 
   const userAvatar = await User.findByIdAndUpdate(
     user.id,
-    { avatarURL: saveImage },
+    { avatarURL: editedImageAndPath },
     { new: true }
   );
 

@@ -7,6 +7,7 @@ import { checkPasswordHashService } from "./passwordHashService.js";
 import { createPasswordHashService } from "./passwordHashService.js";
 import { createUserGravartarServises } from "./gravatarServises.js";
 import { saveImageService } from "./jimpImageService.js";
+import { nanoid } from "nanoid";
 
 const { e401 } = errorText;
 
@@ -19,11 +20,15 @@ export const registerUserService = async (userData) => {
   const passwordHash = await createPasswordHashService(userData.password);
   const userGravatar = createUserGravartarServises(userData.email);
 
+  const verificationToken = nanoid(passwordHash.length);
+  console.log(verificationToken);
+
   const newUser = await User.create({
     ...userData,
     password: passwordHash,
     subscription: userSubscription.STARTER,
     avatarURL: userGravatar,
+    verificationToken,
   });
 
   newUser.password = undefined;

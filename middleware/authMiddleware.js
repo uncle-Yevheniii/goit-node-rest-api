@@ -5,8 +5,9 @@ import { loginContactValidator } from "../schemas/authSchemas.js";
 import { checkRegisterExistsServices } from "../services/authServices.js";
 import { getFindOneUserByIdService } from "../services/authServices.js";
 import { checkTokenService } from "../services/jwtServices.js";
+import { logInUserService } from "../services/authServices.js";
 
-const { e400, e401, e409 } = errorText;
+const { e400, e401, e404, e409 } = errorText;
 
 export const checkRegisterData = async (req, res, next) => {
   try {
@@ -28,7 +29,11 @@ export const checkLogInData = async (req, res, next) => {
     const { value, errors } = loginContactValidator(req.body);
     if (errors) throw HttpError(400, e400, errors);
 
-    req.body = value;
+    const user = await logInUserService(value);
+
+    if (user.verify === false) throw HttpError(404, e404);
+
+    req.user = user;
     next();
   } catch (e) {
     next(e);

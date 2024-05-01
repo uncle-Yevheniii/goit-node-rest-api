@@ -1,6 +1,5 @@
 import { logOutUserService } from "../services/authServices.js";
 import { uppdateUserAvatarService } from "../services/authServices.js";
-import { logInUserService } from "../services/authServices.js";
 import { registerUserService } from "../services/authServices.js";
 
 export const registerController = async (req, res, next) => {
@@ -8,16 +7,25 @@ export const registerController = async (req, res, next) => {
     const newUser = await registerUserService(req.body);
     const { email, subscription, avatarURL } = newUser;
 
+    // send verivfication mail
+
     res.status(201).json({ user: { email, subscription, avatarURL } });
   } catch (e) {
     next(e);
   }
 };
 
-export const logInController = async (req, res, next) => {
+export const verifyUserByEmailController = async (req, res, next) => {
   try {
-    const user = await logInUserService(req.body);
-    const { token, email, subscription, avatarURL } = user;
+    res.status(200);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const logInController = (req, res, next) => {
+  try {
+    const { token, email, subscription, avatarURL } = req.user;
 
     res.status(200).json({ token, user: { email, subscription, avatarURL } });
   } catch (e) {

@@ -9,6 +9,7 @@ import { currentUserController } from "../controllers/authControllers.js";
 import { uppdateUserAvatarController } from "../controllers/authControllers.js";
 import { logOutController } from "../controllers/authControllers.js";
 import { registerController } from "../controllers/authControllers.js";
+import { verifyUserByEmailController } from "../controllers/authControllers.js";
 
 const router = Router();
 
@@ -22,5 +23,7 @@ router
 router
   .route("/avatars")
   .put(protect, uploadAvatar, uppdateUserAvatarController);
+
+router.get("/verify/:verificationToken", verifyUserByEmailController);
 
 export { router };

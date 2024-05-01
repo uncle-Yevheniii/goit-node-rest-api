@@ -1,14 +1,24 @@
 import { logOutUserService } from "../services/authServices.js";
 import { uppdateUserAvatarService } from "../services/authServices.js";
 import { registerUserService } from "../services/authServices.js";
+import { EmailService } from "../services/emailService.js";
 import { verifyService } from "../services/verifyUserService.js";
 
 export const registerController = async (req, res, next) => {
   try {
     const newUser = await registerUserService(req.body);
-    const { email, subscription, avatarURL } = newUser;
+    const { email, subscription, avatarURL, verificationToken } = newUser;
 
     // send verivfication mail
+    try {
+      const resetUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/api/reset-password/${verificationToken}`;
+
+      await new EmailService(newUser, resetUrl).verifyEmail();
+    } catch (e) {
+      newUser.verify = false;
+    }
 
     res.status(201).json({ user: { email, subscription, avatarURL } });
   } catch (e) {

@@ -1,6 +1,7 @@
 import { logOutUserService } from "../services/authServices.js";
 import { uppdateUserAvatarService } from "../services/authServices.js";
 import { registerUserService } from "../services/authServices.js";
+import { verifyService } from "../services/verifyUserService.js";
 
 export const registerController = async (req, res, next) => {
   try {
@@ -17,7 +18,9 @@ export const registerController = async (req, res, next) => {
 
 export const verifyUserByEmailController = async (req, res, next) => {
   try {
-    res.status(200);
+    const user = await verifyService(req.params);
+
+    res.status(200).json({ message: "Verification successful", user });
   } catch (e) {
     next(e);
   }

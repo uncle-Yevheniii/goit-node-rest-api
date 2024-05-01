@@ -1,10 +1,12 @@
 import { Router } from "express";
 
 import { checkLogInData } from "../middleware/authMiddleware.js";
+import { checkVerifyData } from "../middleware/authMiddleware.js";
 import { uploadAvatar } from "../middleware/imageMiddleware.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { checkRegisterData } from "../middleware/authMiddleware.js";
 import { logInController } from "../controllers/authControllers.js";
+import { verifyUserController } from "../controllers/authControllers.js";
 import { currentUserController } from "../controllers/authControllers.js";
 import { uppdateUserAvatarController } from "../controllers/authControllers.js";
 import { logOutController } from "../controllers/authControllers.js";
@@ -24,6 +26,7 @@ router
   .route("/avatars")
   .put(protect, uploadAvatar, uppdateUserAvatarController);
 
+router.post("/verify", checkVerifyData, verifyUserController);
 router.get("/verify/:verificationToken", verifyUserByEmailController);
 
 export { router };

@@ -16,6 +16,16 @@ export const registerController = async (req, res, next) => {
   }
 };
 
+export const verifyUserController = async (req, res, next) => {
+  try {
+    // send verivfication mail
+
+    res.status(200).json({ message: "Verification email sent" });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const verifyUserByEmailController = async (req, res, next) => {
   try {
     const user = await verifyService(req.params);

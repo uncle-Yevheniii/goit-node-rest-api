@@ -21,7 +21,8 @@ export const registerUserService = async (userData) => {
   const userGravatar = createUserGravartarServises(userData.email);
 
   const verificationToken = nanoid(passwordHash.length);
-  console.log(verificationToken);
+
+  console.log("TOKEN", verificationToken);
 
   const newUser = await User.create({
     ...userData,
@@ -78,4 +79,12 @@ export const uppdateUserAvatarService = async (user, file) => {
   );
 
   return userAvatar;
+};
+
+export const getFindOneUserByEmailService = async ({ email }) => {
+  const user = await User.findOne({ email });
+
+  console.log(user);
+
+  return user;
 };

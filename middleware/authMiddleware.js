@@ -1,8 +1,10 @@
 import { errorText } from "../constants/errorText.js";
 import { HttpError } from "../helpers/HttpError.js";
-import { registerContactValidator } from "../schemas/authSchemas.js";
-import { loginContactValidator } from "../schemas/authSchemas.js";
+import { verifyUserValidator } from "../schemas/authSchemas.js";
+import { registerUserValidator } from "../schemas/authSchemas.js";
+import { loginUserValidator } from "../schemas/authSchemas.js";
 import { checkRegisterExistsServices } from "../services/authServices.js";
+import { getFindOneUserByEmailService } from "../services/authServices.js";
 import { getFindOneUserByIdService } from "../services/authServices.js";
 import { checkTokenService } from "../services/jwtServices.js";
 import { logInUserService } from "../services/authServices.js";
@@ -11,7 +13,7 @@ const { e400, e401, e404, e409 } = errorText;
 
 export const checkRegisterData = async (req, res, next) => {
   try {
-    const { value, errors } = registerContactValidator(req.body);
+    const { value, errors } = registerUserValidator(req.body);
     if (errors) throw HttpError(400, e400, errors);
 
     const userExist = await checkRegisterExistsServices({ email: value.email });
@@ -26,7 +28,7 @@ export const checkRegisterData = async (req, res, next) => {
 
 export const checkLogInData = async (req, res, next) => {
   try {
-    const { value, errors } = loginContactValidator(req.body);
+    const { value, errors } = loginUserValidator(req.body);
     if (errors) throw HttpError(400, e400, errors);
 
     const user = await logInUserService(value);
@@ -34,6 +36,23 @@ export const checkLogInData = async (req, res, next) => {
     if (user.verify === false) throw HttpError(404, e404);
 
     req.user = user;
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const checkVerifyData = async (req, res, next) => {
+  try {
+    const { value, errors } = verifyUserValidator(req.body);
+    if (errors) throw HttpError(400, e400, errors);
+
+    const user = await getFindOneUserByEmailService(value);
+    if (!user) throw HttpError(404, e404);
+
+    if (user.verify === true) throw HttpError(400, e400);
+    req.user = user;
+
     next();
   } catch (e) {
     next(e);

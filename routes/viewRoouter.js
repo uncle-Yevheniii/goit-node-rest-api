@@ -1,8 +1,9 @@
 import { Router } from "express";
 
+import { homeController } from "../controllers/viewControllers.js";
+
 const router = Router();
 
-router.get("/home");
-router.get("/contacts");
+router.get("/home", homeController);
 
 export { router };

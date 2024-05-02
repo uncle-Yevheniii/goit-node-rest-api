@@ -14,7 +14,6 @@ export const registerController = async (req, res, next) => {
     const resetUrl = `${req.protocol}://${req.get(
       "host"
     )}/api/users/verify/${verificationToken}`;
-
     await new EmailService(newUser, resetUrl).verifyEmail();
 
     newUser.verify = false;
@@ -30,6 +29,11 @@ export const registerController = async (req, res, next) => {
 export const verifyUserController = async (req, res, next) => {
   try {
     // send verivfication mail
+
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/users/verify/${verificationToken}`;
+    await new EmailService(newUser, resetUrl).verifyEmail();
 
     res.status(200).json({ message: "Verification email sent" });
   } catch (e) {

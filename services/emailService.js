@@ -13,14 +13,14 @@ export class EmailService {
 
   _initTransport() {
     const transportConfig =
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? {
             // MAILGUN
-            host: process.env.MAILTRAP_HOST,
-            port: Number(process.env.MAILTRAP_PORT),
+            host: process.env.MAILGUN_HOST,
+            port: Number(process.env.MAILGUN_PORT),
             auth: {
-              user: process.env.MAILTRAP_USER,
-              pass: process.env.MAILTRAP_PASS,
+              user: process.env.MAILGUN_USER,
+              pass: process.env.MAILGUN_PASS,
             },
           }
         : {

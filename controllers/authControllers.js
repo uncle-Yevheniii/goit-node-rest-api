@@ -10,17 +10,18 @@ export const registerController = async (req, res, next) => {
     const { email, subscription, avatarURL, verificationToken } = newUser;
 
     // send verivfication mail
-    try {
-      const resetUrl = `${req.protocol}://${req.get(
-        "host"
-      )}/api/reset-password/${verificationToken}`;
 
-      await new EmailService(newUser, resetUrl).verifyEmail();
-    } catch (e) {
-      newUser.verify = false;
-    }
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/users/verify/${verificationToken}`;
 
-    res.status(201).json({ user: { email, subscription, avatarURL } });
+    await new EmailService(newUser, resetUrl).verifyEmail();
+
+    newUser.verify = false;
+
+    res
+      .status(201)
+      .json({ user: { email, subscription, avatarURL }, resetUrl });
   } catch (e) {
     next(e);
   }

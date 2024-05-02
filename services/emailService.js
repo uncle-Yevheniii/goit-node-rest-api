@@ -39,7 +39,7 @@ export class EmailService {
   async _send(template, subject) {
     const html = pug.renderFile(
       path.join(process.cwd(), "views", `${template}.pug`),
-      { name: this.name, urt: this.url, subject }
+      { name: this.name, url: this.url, subject }
     );
 
     const emailConfig = {

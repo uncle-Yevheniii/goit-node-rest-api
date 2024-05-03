@@ -45,12 +45,20 @@ export const logInUserService = async ({ email, password }) => {
   if (!passIsValid) throw HttpError(401, e401);
 
   const token = singnTokenService(user.id);
-  user.token = token;
-  await user.save();
 
-  user.password = undefined;
+  const result = await User.findByIdAndUpdate(
+    user.id,
+    { token },
+    { new: true }
+  );
+  // user.token = token;
+  // await user.save();
 
-  return user;
+  // user.password = undefined;
+
+  // return user;
+
+  return result;
 };
 
 export const getFindOneUserByIdService = async (id) => {

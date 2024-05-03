@@ -84,7 +84,5 @@ export const uppdateUserAvatarService = async (user, file) => {
 export const getFindOneUserByEmailService = async ({ email }) => {
   const user = await User.findOne({ email });
 
-  console.log(user);
-
   return user;
 };

@@ -30,10 +30,12 @@ export const verifyUserController = async (req, res, next) => {
   try {
     // send verivfication mail
 
+    const { verificationToken } = req.user;
+
     const resetUrl = `${req.protocol}://${req.get(
       "host"
     )}/api/users/verify/${verificationToken}`;
-    await new EmailService(newUser, resetUrl).verifyEmail();
+    await new EmailService(req.user, resetUrl).verifyEmail();
 
     res.status(200).json({ message: "Verification email sent" });
   } catch (e) {

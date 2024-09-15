@@ -5,6 +5,9 @@ import { HttpError } from "../helpers/HttpError.js";
 import { singnTokenService } from "./jwtServices.js";
 import { checkPasswordHashService } from "./passwordHashService.js";
 import { createPasswordHashService } from "./passwordHashService.js";
+import { createUserGravartarServises } from "./gravatarServises.js";
+import { saveImageService } from "./jimpImageService.js";
+import { nanoid } from "nanoid";
 
 const { e401 } = errorText;
 
@@ -15,17 +18,21 @@ export const checkRegisterExistsServices = async (filter) => {
 
 export const registerUserService = async (userData) => {
   const passwordHash = await createPasswordHashService(userData.password);
+  const userGravatar = createUserGravartarServises(userData.email);
+
+  const verificationToken = nanoid(passwordHash.length);
+
+  console.log("TOKEN", verificationToken);
 
   const newUser = await User.create({
     ...userData,
     password: passwordHash,
     subscription: userSubscription.STARTER,
+    avatarURL: userGravatar,
+    verificationToken,
   });
 
   newUser.password = undefined;
-
-  // const token = singnTokenService(newUser.id);
-  // newUser.token = token;
 
   return newUser;
 };
@@ -38,12 +45,20 @@ export const logInUserService = async ({ email, password }) => {
   if (!passIsValid) throw HttpError(401, e401);
 
   const token = singnTokenService(user.id);
-  user.token = token;
-  await user.save();
 
-  user.password = undefined;
+  const result = await User.findByIdAndUpdate(
+    user.id,
+    { token },
+    { new: true }
+  );
+  // user.token = token;
+  // await user.save();
 
-  return user;
+  // user.password = undefined;
+
+  // return user;
+
+  return result;
 };
 
 export const getFindOneUserByIdService = async (id) => {
@@ -58,6 +73,24 @@ export const logOutUserService = async (id) => {
 
   user.token = null;
   await user.save();
+
+  return user;
+};
+
+export const uppdateUserAvatarService = async (user, file) => {
+  const editedImageAndPath = await saveImageService(file, "avatars", user.id);
+
+  const userAvatar = await User.findByIdAndUpdate(
+    user.id,
+    { avatarURL: editedImageAndPath },
+    { new: true }
+  );
+
+  return userAvatar;
+};
+
+export const getFindOneUserByEmailService = async ({ email }) => {
+  const user = await User.findOne({ email });
 
   return user;
 };

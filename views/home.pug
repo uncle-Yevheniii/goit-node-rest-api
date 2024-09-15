@@ -1,0 +1,15 @@
+extends base
+
+block content
+  h1.title= title
+
+  ul 
+    each item in user 
+      li
+        img(src=item.avatarURL)
+        p= item._id 
+        p= item.email 
+        p= item.subscription
+
+        p= item.createdAt
+        p= item.updatedAt

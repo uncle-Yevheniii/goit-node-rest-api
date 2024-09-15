@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 import { router as contactsRouter } from "./routes/contactsRouter.js";
 import { router as authRouter } from "./routes/authRouter.js";
+import { router as viewRouter } from "./routes/viewRoouter.js";
 import { errorGlobalHandler } from "./controllers/errorControllers.js";
 import { errorText } from "./constants/errorText.js";
 
@@ -31,6 +32,13 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
  */
 app.use(express.json());
 app.use(cors());
+app.use(express.static("public"));
+
+/**
+ * pug
+ */
+app.set("view engine", "pug");
+app.set("views", "views");
 
 /**
  * routes
@@ -38,6 +46,8 @@ app.use(cors());
 const pathPrefix = "/api";
 app.use(`${pathPrefix}/users`, authRouter);
 app.use(`${pathPrefix}/contacts`, contactsRouter);
+
+app.use("/", viewRouter);
 
 // not-found-route
 app.all("*", (req, res) => {
